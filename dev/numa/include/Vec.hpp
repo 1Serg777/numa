@@ -17,10 +17,8 @@ namespace numa
 		Vec() = default;
 		~Vec() = default;
 
-		Vec(T t);
-
 		template<typename U>
-		Vec(U u);
+		Vec(const U& u);
 
 		// Converting constructors
 
@@ -38,9 +36,21 @@ namespace numa
 
 		Vec<T, S> operator-() const;
 
-		Vec<T, S>& operator+=(const Vec<T, S>& rhs);
-		Vec<T, S>& operator*=(const Vec<T, S>& rhs);
-		Vec<T, S>& operator/=(const Vec<T, S>& rhs);
+		template<typename U>
+		Vec<T, S>& operator+=(const Vec<U, S>& rhs);
+
+		template<typename U>
+		Vec<T, S>& operator*=(const Vec<U, S>& rhs);
+
+		template<typename U>
+		Vec<T, S>& operator*=(const U& u);
+
+		template<typename U>
+		Vec<T, S>& operator/=(const Vec<U, S>& rhs);
+
+		template<typename U>
+		Vec<T, S>& operator/=(const U& u);
+
 
 		T& operator[](int idx)
 		{
@@ -68,17 +78,8 @@ namespace numa
 	// Constructors
 
 	template<typename T, int S>
-	Vec<T, S>::Vec(T t)
-	{
-		for (int i = 0; i < S; i++)
-		{
-			components[i] = t;
-		}
-	}
-
-	template<typename T, int S>
 	template<typename U>
-	Vec<T, S>::Vec(U u)
+	Vec<T, S>::Vec(const U& u)
 	{
 		for (int i = 0; i < S; i++)
 		{
@@ -132,59 +133,86 @@ namespace numa
 	}
 
 	template<typename T, int S>
-	Vec<T, S>& Vec<T, S>::operator+=(const Vec<T, S>& rhs)
+	template<typename U>
+	Vec<T, S>& Vec<T, S>::operator+=(const Vec<U, S>& rhs)
 	{
 		for (int i = 0; i < S; i++)
 		{
-			components[i] += rhs[i];
+			components[i] += static_cast<T>(rhs[i]);
 		}
 		return *this;
 	}
+
 	template<typename T, int S>
-	Vec<T, S>& Vec<T, S>::operator*=(const Vec<T, S>& rhs)
+	template<typename U>
+	Vec<T, S>& Vec<T, S>::operator*=(const Vec<U, S>& rhs)
 	{
 		for (int i = 0; i < S; i++)
 		{
-			components[i] *= rhs[i];
+			components[i] *= static_cast<T>(rhs[i]);
 		}
 		return *this;
 	}
+	
 	template<typename T, int S>
-	Vec<T, S>& Vec<T, S>::operator/=(const Vec<T, S>& rhs)
+	template<typename U>
+	Vec<T, S>& Vec<T, S>::operator*=(const U& u)
 	{
 		for (int i = 0; i < S; i++)
 		{
-			components[i] /= rhs[i];
+			components[i] *= static_cast<T>(u);
+		}
+		return *this;
+	}
+
+	template<typename T, int S>
+	template<typename U>
+	Vec<T, S>& Vec<T, S>::operator/=(const Vec<U, S>& rhs)
+	{
+		for (int i = 0; i < S; i++)
+		{
+			components[i] /= static_cast<T>(rhs[i]);
+		}
+		return *this;
+	}
+	
+	template<typename T, int S>
+	template<typename U>
+	Vec<T, S>& Vec<T, S>::operator/=(const U& u)
+	{
+		for (int i = 0; i < S; i++)
+		{
+			components[i] /= static_cast<T>(u);
 		}
 		return *this;
 	}
 
 	// 2) Defined as separate functions
 
-	template<typename T, int Size>
-	Vec<T, Size> operator+(const Vec<T, Size>& v1, const Vec<T, Size>& v2)
+	template<typename T, typename U, int Size>
+	Vec<T, Size> operator+(const Vec<T, Size>& v1, const Vec<U, Size>& v2)
 	{
 		Vec<T, Size> res{};
 		for (int i = 0; i < Size; i++)
 		{
-			res[i] = v1[i] + v2[i];
-		}
-		return res;
-	}
-
-	template<typename T, int Size>
-	Vec<T, Size> operator-(const Vec<T, Size>& v1, const Vec<T, Size>& v2)
-	{
-		Vec<T, Size> res{};
-		for (int i = 0; i < Size; i++)
-		{
-			res[i] = v1[i] - v2[i];
+			res[i] = v1[i] + static_cast<T>(v2[i]);
 		}
 		return res;
 	}
 
 	template<typename T, typename U, int Size>
-	Vec<T, Size> operator*(const Vec<T, Size>& v, U u)
+	Vec<T, Size> operator-(const Vec<T, Size>& v1, const Vec<U, Size>& v2)
+	{
+		Vec<T, Size> res{};
+		for (int i = 0; i < Size; i++)
+		{
+			res[i] = v1[i] - static_cast<T>(v2[i]);
+		}
+		return res;
+	}
+
+	template<typename T, typename U, int Size>
+	Vec<T, Size> operator*(const Vec<T, Size>& v, const U& u)
 	{
 		Vec<T, Size> res{};
 		for (int i = 0; i < Size; i++)
@@ -195,7 +223,7 @@ namespace numa
 	}
 
 	template<typename T, typename U, int Size>
-	Vec<T, Size> operator*(U u, const Vec<T, Size>& v)
+	Vec<T, Size> operator*(const U& u, const Vec<T, Size>& v)
 	{
 		Vec<T, Size> res{};
 		for (int i = 0; i < Size; i++)
@@ -217,7 +245,7 @@ namespace numa
 	}
 
 	template<typename T, typename U, int Size>
-	Vec<T, Size> operator/(const Vec<T, Size>& v, U u)
+	Vec<T, Size> operator/(const Vec<T, Size>& v, const U& u)
 	{
 		Vec<T, Size> vec{};
 		for (int i = 0; i < Size; i++)
