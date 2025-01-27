@@ -7,6 +7,7 @@ namespace numa
 	namespace internal
 	{
 		double PiConst();
+		double PiOverTwoConst();
 		double TwoPiConst();
 
 		double ToRad(double deg);
@@ -19,6 +20,13 @@ namespace numa
 	T Pi()
 	{
 		return static_cast<T>(internal::PiConst());
+	}
+	template<
+		typename T,
+		std::enable_if_t<std::is_floating_point_v<T>, bool> = true>
+	T PiOverTwo()
+	{
+		return static_cast<T>(internal::PiOverTwoConst());
 	}
 	template<
 		typename T,

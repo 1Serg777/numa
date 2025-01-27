@@ -32,6 +32,7 @@ project ( "numa" )
 
    files {
       numa_project_include_path .. "/**.h",
+      numa_project_include_path .. "/**.hpp",
       numa_project_src_path .. "/**.cpp"
    }
 
@@ -45,8 +46,13 @@ project ( "numa" )
 
    filter ( { "system:windows", "action:vs*" } )
       vpaths {
-         ["Include/*"] = { numa_project_include_path .. "/**.h" },
-         ["Sources/*"] = { numa_project_src_path .. "/**.cpp" },
+         ["Include/*"] = {
+            numa_project_include_path .. "/**.h",
+            numa_project_include_path .. "/**.hpp"
+         },
+         ["Sources/*"] = {
+            numa_project_src_path .. "/**.cpp"
+         },
       }
 
 project ( "sandbox" )
@@ -72,6 +78,7 @@ project ( "sandbox" )
 
    files {
       sandbox_project_include_path .. "/**.h",
+      sandbox_project_include_path .. "/**.hpp",
       sandbox_project_src_path .. "/**.cpp"
    }
 
@@ -85,6 +92,11 @@ project ( "sandbox" )
 
    filter ( { "system:windows", "action:vs*" } )
       vpaths {
-         ["Include/*"] = { sandbox_project_include_path .. "/**.h" },
-         ["Sources/*"] = { sandbox_project_src_path .. "/**.cpp" },
+         ["Include/*"] = {
+            sandbox_project_include_path .. "/**.h",
+            sandbox_project_include_path .. "/**.hpp"
+         },
+         ["Sources/*"] = {
+            sandbox_project_src_path .. "/**.cpp"
+         },
       }
