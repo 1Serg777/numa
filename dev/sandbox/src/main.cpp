@@ -4,6 +4,7 @@
 #include "Numa.h"
 #include "Vec.hpp"
 #include "Vec2.hpp"
+#include "Vec3.hpp"
 
 void TestNuma();
 void TestVec();
@@ -56,7 +57,21 @@ void TestVec()
     // numa::Vec<float, 5> sumRes1 = positionV5 + triagUv3; // won't compile!
     // however, the one below will
     numa::Vec<float, 5> sumRes1 = positionV5 + numa::Vec<float, 5>{ triagUv3 };
+    numa::Vec<float, 15> sumRes2 = positionV5 + numa::Vec<float, 5>{ numa::Vec2{ positionV3 } };
+
+    numa::Vec2 uv4{ origin };
+    numa::Vec2 uv5 = numa::Vec2{ positionV3 };
+    numa::Vec2 uv6 = positionV5;
 
     // numa::Vec4 positionV4{ 1.0f, 2.0f, 0.5f };
     // numa::Vec4 positionV4 = numa::Vec<float, 4>{ 1.0f, 2.0f, 0.5f, 1.0f };
+
+    numa::Vec3 pos1{ positionV5 };
+    numa::Vec3 pos2{ numa::Vec<int, 8>{ 2 } };
+    numa::Vec3 pos3 = uv4;
+
+    numa::Vec3 nextPos1 = positionV5 + numa::Vec<float, 5>{ uv4 };
+    numa::Vec3 nextPos2 = numa::Vec2{ positionV5 } + uv4;
+
+    nextPos2 *= 1;
 }
