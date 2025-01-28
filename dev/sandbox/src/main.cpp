@@ -6,14 +6,17 @@
 #include "Vec2.hpp"
 #include "Vec3.hpp"
 #include "Vec4.hpp"
+#include "Mat.hpp"
 
 void TestNuma();
 void TestVec();
+void TestMat();
 
 int main()
 {
     TestNuma();
     TestVec();
+    TestMat();
     return EXIT_SUCCESS;
 }
 
@@ -99,9 +102,45 @@ void TestVec()
     numa::Vec3 pos = imgUv;
     pos.z = -2;
 
-    numa::Vec4 posH = numa::Vec4{ pos };
+    // numa::Vec4 posH = numa::Vec4{ pos };
+    // or
+    numa::Vec4 posH = pos;
     posH.w = 1.0f;
 
     // Should add this feature!
-    // numa::Vec4 posH = numa::Vec4{ pos, 1.0f };
+    numa::Vec4 posH2 = numa::Vec4{ pos, 1.0f };
+    numa::Vec4 posH3{ imgUv, 0.0f, 1 };
+}
+void TestMat()
+{
+    // Generic 'Mat' class tests
+
+    numa::Mat<float, 3, 5> m1{ 1 };
+    numa::Mat<int, 3, 5> m2{ 1.0f };
+
+    numa::Mat<float, 3, 5> m1m2addRes = m1 + m2;
+    numa::Mat<double, 3, 5> m1m2addRes2 = m1 + m2;
+
+    numa::Mat<float, 3, 5> m1m2subRes1 = numa::Mat<float, 3, 5>{ m1 - m2 };
+    numa::Mat<double, 3, 5> m1m2subRes2 = m1 - m2;
+
+    m1m2addRes2 += m1m2addRes;
+    m1m2addRes2 -= m1m2addRes;
+
+    numa::Mat<float, 2, 3> matMult{ 2 };
+    numa::Mat<float, 3, 4> matMultRes1 = matMult * 2;
+    numa::Mat<float, 5, 6> matMultRes2 = 4 * matMult;
+    numa::Mat<float, 7, 8> matMultRes3 = (matMult * 4) / 2;
+
+    // Mat2 tests
+
+    // TODO
+
+    // Mat3 tests
+
+    // TODO
+
+    // Mat4 tests
+
+    // TODO
 }

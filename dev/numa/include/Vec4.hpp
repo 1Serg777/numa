@@ -28,12 +28,24 @@ namespace numa
 		template<typename U, int S>
 		Vec(const Vec<U, S>& v);
 
+		template<typename U, typename Z, typename W>
+		Vec(const Vec<U, 2>& v, const Z& z, const W& w);
+
+		template<typename U, typename V>
+		Vec(const Vec<U, 2>& v1, const Vec<V, 2>& v2);
+
+		template<typename U, typename W>
+		Vec(const Vec<U, 3>& v, const W& w);
+
 		// Operators
 
 		Vec<T, 4> operator-() const;
 
 		template<typename U>
 		Vec<T, 4>& operator+=(const Vec<U, 4>& rhs);
+
+		template<typename U>
+		Vec<T, 4>& operator-=(const Vec<U, 4>& rhs);
 
 		template<typename U>
 		Vec<T, 4>& operator*=(const Vec<U, 4>& rhs);
@@ -108,6 +120,36 @@ namespace numa
 		}
 	}
 
+	template<typename T>
+	template<typename U, typename Z, typename W>
+	inline Vec<T, 4>::Vec(const Vec<U, 2>& v, const Z& z, const W& w)
+	{
+		this->x = static_cast<T>(v[0]); // v.x
+		this->y = static_cast<T>(v[1]); // v.y
+		this->z = static_cast<T>(z);
+		this->w = static_cast<T>(w);
+	}
+
+	template<typename T>
+	template<typename U, typename V>
+	inline Vec<T, 4>::Vec(const Vec<U, 2>& v1, const Vec<V, 2>& v2)
+	{
+		this->x = static_cast<T>(v1[0]); // v1.x
+		this->y = static_cast<T>(v1[1]); // v1.y
+		this->z = static_cast<T>(v2[0]); // v2.x
+		this->w = static_cast<T>(v2[1]); // v2.y
+	}
+
+	template<typename T>
+	template<typename U, typename W>
+	inline Vec<T, 4>::Vec(const Vec<U, 3>& v, const W& w)
+	{
+		this->x = static_cast<T>(v[0]); // v.x
+		this->y = static_cast<T>(v[1]); // v.y
+		this->z = static_cast<T>(v[2]); // v.z
+		this->w = static_cast<T>(w);
+	}
+
 	// Operators
 
 	// 1) Defined in the class
@@ -131,6 +173,17 @@ namespace numa
 		this->y += static_cast<T>(rhs.y);
 		this->z += static_cast<T>(rhs.z);
 		this->w += static_cast<T>(rhs.w);
+		return *this;
+	}
+
+	template<typename T>
+	template<typename U>
+	Vec<T, 4>& Vec<T, 4>::operator-=(const Vec<U, 4>& rhs)
+	{
+		this->x -= static_cast<T>(rhs.x);
+		this->y -= static_cast<T>(rhs.y);
+		this->z -= static_cast<T>(rhs.z);
+		this->w -= static_cast<T>(rhs.w);
 		return *this;
 	}
 

@@ -36,6 +36,9 @@ namespace numa
 		Vec<T, 2>& operator+=(const Vec<U, 2>& rhs);
 
 		template<typename U>
+		Vec<T, 2>& operator-=(const Vec<U, 2>& rhs);
+
+		template<typename U>
 		Vec<T, 2>& operator*=(const Vec<U, 2>& rhs);
 
 		template<typename U>
@@ -123,6 +126,15 @@ namespace numa
 	{
 		this->x += static_cast<T>(rhs.x);
 		this->y += static_cast<T>(rhs.y);
+		return *this;
+	}
+
+	template<typename T>
+	template<typename U>
+	Vec<T, 2>& Vec<T, 2>::operator-=(const Vec<U, 2>& rhs)
+	{
+		this->x -= static_cast<T>(rhs.x);
+		this->y -= static_cast<T>(rhs.y);
 		return *this;
 	}
 
