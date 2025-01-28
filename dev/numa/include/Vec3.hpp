@@ -20,8 +20,8 @@ namespace numa
 
 		template<typename U>
 		Vec(const U& u);
-		template<typename U, typename V, typename W>
-		Vec(const U& x, const V& y, const W& w);
+		template<typename X, typename Y, typename Z>
+		Vec(const X& x, const Y& y, const Z& z);
 
 		// Converting constructors
 
@@ -67,8 +67,8 @@ namespace numa
 
 		union
 		{
-			struct { T x; T y; T z };
-			struct { T r; T g; T b };
+			struct { T x; T y; T z; };
+			struct { T r; T g; T b; };
 			T components[3];
 		};
 	};
@@ -85,12 +85,12 @@ namespace numa
 	}
 
 	template<typename T>
-	template<typename U, typename V, typename W>
-	Vec<T, 3>::Vec(const U& x, const V& y, const W& w)
+	template<typename X, typename Y, typename Z>
+	Vec<T, 3>::Vec(const X& x, const Y& y, const Z& z)
 	{
 		this->x = static_cast<T>(x);
 		this->y = static_cast<T>(y);
-		this->z = static_cast<T>(w);
+		this->z = static_cast<T>(z);
 	}
 
 	// Converting constructors

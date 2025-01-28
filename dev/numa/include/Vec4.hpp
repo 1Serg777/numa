@@ -7,7 +7,7 @@
 namespace numa
 {
 	template<typename T>
-	class Vec<T, 2>
+	class Vec<T, 4>
 	{
 	public:
 
@@ -20,8 +20,8 @@ namespace numa
 
 		template<typename U>
 		Vec(const U& u);
-		template<typename X, typename Y>
-		Vec(const X& x, const Y& y);
+		template<typename X, typename Y, typename Z, typename W>
+		Vec(const X& x, const Y& y, const Z& z, const W& w);
 
 		// Converting constructors
 
@@ -30,22 +30,22 @@ namespace numa
 
 		// Operators
 
-		Vec<T, 2> operator-() const;
+		Vec<T, 4> operator-() const;
 
 		template<typename U>
-		Vec<T, 2>& operator+=(const Vec<U, 2>& rhs);
+		Vec<T, 4>& operator+=(const Vec<U, 4>& rhs);
 
 		template<typename U>
-		Vec<T, 2>& operator*=(const Vec<U, 2>& rhs);
+		Vec<T, 4>& operator*=(const Vec<U, 4>& rhs);
 
 		template<typename U>
-		Vec<T, 2>& operator*=(const U& u);
+		Vec<T, 4>& operator*=(const U& u);
 
 		template<typename U>
-		Vec<T, 2>& operator/=(const Vec<U, 2>& rhs);
+		Vec<T, 4>& operator/=(const Vec<U, 4>& rhs);
 
 		template<typename U>
-		Vec<T, 2>& operator/=(const U& u);
+		Vec<T, 4>& operator/=(const U& u);
 
 		T& operator[](int idx)
 		{
@@ -67,9 +67,9 @@ namespace numa
 
 		union
 		{
-			struct { T x; T y; };
-			struct { T u; T v; };
-			T components[2];
+			struct { T x; T y; T z; T w; };
+			struct { T r; T g; T b; T a; };
+			T components[4];
 		};
 	};
 
@@ -77,27 +77,31 @@ namespace numa
 
 	template<typename T>
 	template<typename U>
-	Vec<T, 2>::Vec(const U& u)
+	Vec<T, 4>::Vec(const U& u)
 	{
 		this->x = static_cast<T>(u);
 		this->y = static_cast<T>(u);
+		this->z = static_cast<T>(u);
+		this->w = static_cast<T>(u);
 	}
 
 	template<typename T>
-	template<typename X, typename Y>
-	Vec<T, 2>::Vec(const X& x, const Y& y)
+	template<typename X, typename Y, typename Z, typename W>
+	Vec<T, 4>::Vec(const X& x, const Y& y, const Z& z, const W& w)
 	{
 		this->x = static_cast<T>(x);
 		this->y = static_cast<T>(y);
+		this->z = static_cast<T>(z);
+		this->w = static_cast<T>(w);
 	}
 
 	// Converting constructors
 
 	template<typename T>
 	template<typename U, int S>
-	Vec<T, 2>::Vec(const Vec<U, S>& v)
+	Vec<T, 4>::Vec(const Vec<U, S>& v)
 	{
-		int minDimensions = std::min(2, S);
+		int minDimensions = std::min(4, S);
 		for (int i = 0; i < minDimensions; i++)
 		{
 			components[i] = static_cast<T>(v[i]);
@@ -109,56 +113,68 @@ namespace numa
 	// 1) Defined in the class
 
 	template<typename T>
-	Vec<T, 2> Vec<T, 2>::operator-() const
+	Vec<T, 4> Vec<T, 4>::operator-() const
 	{
-		Vec<T, 2> res{};
+		Vec<T, 4> res{};
 		res.x = -this.x;
 		res.y = -this.y;
+		res.z = -this.z;
+		res.w = -this.w;
 		return res;
 	}
 
 	template<typename T>
 	template<typename U>
-	Vec<T, 2>& Vec<T, 2>::operator+=(const Vec<U, 2>& rhs)
+	Vec<T, 4>& Vec<T, 4>::operator+=(const Vec<U, 4>& rhs)
 	{
 		this->x += static_cast<T>(rhs.x);
 		this->y += static_cast<T>(rhs.y);
+		this->z += static_cast<T>(rhs.z);
+		this->w += static_cast<T>(rhs.w);
 		return *this;
 	}
 
 	template<typename T>
 	template<typename U>
-	Vec<T, 2>& Vec<T, 2>::operator*=(const Vec<U, 2>& rhs)
+	Vec<T, 4>& Vec<T, 4>::operator*=(const Vec<U, 4>& rhs)
 	{
 		this->x *= static_cast<T>(rhs.x);
 		this->y *= static_cast<T>(rhs.y);
+		this->z *= static_cast<T>(rhs.z);
+		this->w *= static_cast<T>(rhs.w);
 		return *this;
 	}
 
 	template<typename T>
 	template<typename U>
-	Vec<T, 2>& Vec<T, 2>::operator*=(const U& u)
+	Vec<T, 4>& Vec<T, 4>::operator*=(const U& u)
 	{
 		this->x *= static_cast<T>(u);
 		this->y *= static_cast<T>(u);
+		this->z *= static_cast<T>(u);
+		this->w *= static_cast<T>(u);
 		return *this;
 	}
 
 	template<typename T>
 	template<typename U>
-	Vec<T, 2>& Vec<T, 2>::operator/=(const Vec<U, 2>& rhs)
+	Vec<T, 4>& Vec<T, 4>::operator/=(const Vec<U, 4>& rhs)
 	{
 		this->x /= static_cast<T>(rhs.x);
 		this->y /= static_cast<T>(rhs.y);
+		this->z /= static_cast<T>(rhs.z);
+		this->w /= static_cast<T>(rhs.w);
 		return *this;
 	}
 
 	template<typename T>
 	template<typename U>
-	Vec<T, 2>& Vec<T, 2>::operator/=(const U& u)
+	Vec<T, 4>& Vec<T, 4>::operator/=(const U& u)
 	{
 		this->x /= static_cast<T>(u);
 		this->y /= static_cast<T>(u);
+		this->z /= static_cast<T>(u);
+		this->w /= static_cast<T>(u);
 		return *this;
 	}
 
@@ -168,19 +184,19 @@ namespace numa
 
 	// Common type definitions
 
-	using Vec2 = Vec<float, 2>;
-	using dVec2 = Vec<double, 2>;
+	using Vec4 = Vec<float, 4>;
+	using dVec4 = Vec<double, 4>;
 
-	using iVec2 = Vec<int, 2>;
-	using uVec2 = Vec<unsigned int, 2>;
+	using iVec4 = Vec<int, 4>;
+	using uVec4 = Vec<unsigned int, 4>;
 
-	using u8Vec2 = Vec<uint8_t, 2>;
-	using u16Vec2 = Vec<uint16_t, 2>;
-	using u32Vec2 = Vec<uint32_t, 2>;
-	using u64Vec2 = Vec<uint64_t, 2>;
+	using u8Vec4 = Vec<uint8_t, 4>;
+	using u16Vec4 = Vec<uint16_t, 4>;
+	using u32Vec4 = Vec<uint32_t, 4>;
+	using u64Vec4 = Vec<uint64_t, 4>;
 
-	using i8Vec2 = Vec<int8_t, 2>;
-	using i16Vec2 = Vec<int16_t, 2>;
-	using i32Vec2 = Vec<int32_t, 2>;
-	using i64Vec2 = Vec<int64_t, 2>;
+	using i8Vec4 = Vec<int8_t, 4>;
+	using i16Vec4 = Vec<int16_t, 4>;
+	using i32Vec4 = Vec<int32_t, 4>;
+	using i64Vec4 = Vec<int64_t, 4>;
 }

@@ -5,6 +5,7 @@
 #include "Vec.hpp"
 #include "Vec2.hpp"
 #include "Vec3.hpp"
+#include "Vec4.hpp"
 
 void TestNuma();
 void TestVec();
@@ -59,12 +60,13 @@ void TestVec()
     numa::Vec<float, 5> sumRes1 = positionV5 + numa::Vec<float, 5>{ triagUv3 };
     numa::Vec<float, 15> sumRes2 = positionV5 + numa::Vec<float, 5>{ numa::Vec2{ positionV3 } };
 
+    // Vec2 tests
+
     numa::Vec2 uv4{ origin };
     numa::Vec2 uv5 = numa::Vec2{ positionV3 };
     numa::Vec2 uv6 = positionV5;
 
-    // numa::Vec4 positionV4{ 1.0f, 2.0f, 0.5f };
-    // numa::Vec4 positionV4 = numa::Vec<float, 4>{ 1.0f, 2.0f, 0.5f, 1.0f };
+    // Vec3 tests
 
     numa::Vec3 pos1{ positionV5 };
     numa::Vec3 pos2{ numa::Vec<int, 8>{ 2 } };
@@ -74,4 +76,32 @@ void TestVec()
     numa::Vec3 nextPos2 = numa::Vec2{ positionV5 } + uv4;
 
     nextPos2 *= 1;
+
+    // Vec4 tests
+
+    // numa::Vec4 positionV4{ 1.0f, 2.0f, 0.5f };
+    // numa::Vec4 positionV4 = numa::Vec<float, 4>{ 1.0f, 2.0f, 0.5f, 1.0f };
+
+    numa::Vec4 posV41{ sumRes2 };
+    numa::Vec4 posV42{ numa::Vec<int, 11>{ 5.0 } };
+    numa::Vec4 posV43 = triagUv1;
+
+    numa::Vec4 posMul1 = nextPos1 * nextPos2;
+    posMul1 *= posV42;
+
+    numa::Vec4 nextPosV41 = positionV5 + numa::Vec<float, 5>{ uv4 };
+    numa::Vec4 nextPosV42 = numa::Vec2{ positionV5 } + uv4;
+
+    // Additional tests
+
+    numa::Vec2 imgUv{ 0.25, 0.15 };
+
+    numa::Vec3 pos = imgUv;
+    pos.z = -2;
+
+    numa::Vec4 posH = numa::Vec4{ pos };
+    posH.w = 1.0f;
+
+    // Should add this feature!
+    // numa::Vec4 posH = numa::Vec4{ pos, 1.0f };
 }
