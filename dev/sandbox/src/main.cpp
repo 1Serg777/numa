@@ -7,6 +7,7 @@
 #include "Vec3.hpp"
 #include "Vec4.hpp"
 #include "Mat.hpp"
+#include "Mat2.hpp"
 
 void TestNuma();
 void TestVec();
@@ -44,8 +45,13 @@ void TestVec()
 
     numa::Vec<float, 3> origin{ 0.0f };
 
+    float* originData = origin.Data();
+    const float* originDataConst = origin.Data();
+
     numa::Vec<float, 5> positionV5{ 1.0f };
     numa::Vec<float, 3> positionV3{ 0.0f };
+
+    numa::Vec<float, 8> positionV8 = positionV5;
 
     positionV3 = positionV5;
     positionV5 = positionV3;
@@ -117,6 +123,7 @@ void TestMat()
 
     numa::Mat<float, 3, 5> m1{ 1 };
     numa::Mat<int, 3, 5> m2{ 1.0f };
+    numa::Mat<int, 3, 3> m3{ 1.0f };
 
     numa::Mat<float, 3, 5> m1m2addRes = m1 + m2;
     numa::Mat<double, 3, 5> m1m2addRes2 = m1 + m2;
@@ -134,7 +141,13 @@ void TestMat()
 
     // Mat2 tests
 
-    // TODO
+    numa::Mat2 m2I{ 1.0f };
+
+    numa::Mat2 scale = 2.0f * m2I;
+    scale = m2I * 4.0f;
+    scale = scale / 2;
+
+
 
     // Mat3 tests
 

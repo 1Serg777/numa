@@ -30,8 +30,26 @@ namespace numa
 
 		Mat() = default;
 
-		template<typename U>
-		Mat(const U& u);
+		template<int R = Rows, int C = Cols, typename U, std::enable_if_t<R != C, bool> = true>
+		Mat(const U& u)
+		{
+			for (int col = 0; col < Cols; col++)
+			{
+				columns[col] = column_type{ u };
+			}
+		}
+
+		template<int R = Rows, int C = Cols, typename U, std::enable_if_t<R == C, bool> = true>
+		Mat(const U& u)
+		{
+			for (int i = 0; i < Cols; i++)
+			{
+				columns[i] = column_type{ T(0) };
+				columns[i][i] = static_cast<T>(u);
+			}
+		}
+
+		// Converting constructors
 
 		template<typename U, int Rows2, int Cols2>
 		Mat(const Mat<U, Rows2, Cols2>& mat);
@@ -75,8 +93,9 @@ namespace numa
 
 	// Constructors
 
+	/*
 	template<typename T, int Rows, int Cols>
-	template<typename U>
+	template<int R, int C, typename U, std::enable_if_t<R != C, bool>>
 	Mat<T, Rows, Cols>::Mat(const U& u)
 	{
 		for (int col = 0; col < Cols; col++)
@@ -85,20 +104,32 @@ namespace numa
 		}
 	}
 
+	template<typename T, int Rows, int Cols>
+	template<int R, int C, typename U, std::enable_if_t<R == C, bool>>
+	Mat<T, Rows, Cols>::Mat(const U& u)
+	{
+		for (int i = 0; i < Cols; i++)
+		{
+			columns[i][i] = static_cast<T>(u);
+		}
+	}
+	*/
+
 	// Converting constructors
 
 	template<typename T, int Rows, int Cols>
 	template<typename U, int Rows2, int Cols2>
 	Mat<T, Rows, Cols>::Mat(const Mat<U, Rows2, Cols2>& mat)
 	{
-		int minRowsDim = std::min(Rows, Rows2);
+		// int minRowsDim = std::min(Rows, Rows2);
 		int minColsDim = std::min(Cols, Cols2);
 		for (int i = 0; i < minColsDim; i++)
 		{
-			for (int j = 0; j < minRowsDim; j++)
-			{
-				this->columns[j] = static_cast<T>(mat[i][j]); // same as below
-			}
+			// for (int j = 0; j < minRowsDim; j++)
+			// {
+				// this->columns[i][j] = static_cast<T>(mat[i][j]);
+			// }
+			this->columns[i] = mat[i];
 		}
 	}
 
@@ -218,12 +249,12 @@ namespace numa
 	}
 
 	template<typename T, typename U, int Rows, int Cols>
-	Vec<T, Rows> operator*(const Mat<T, Rows, Cols>& m, const Vec<U, Cols>& v)
+	Vec<U, Rows> operator*(const Mat<T, Rows, Cols>& m, const Vec<U, Cols>& v)
 	{
-		Vec<T, Rows> res{ T(0) };
+		Vec<U, Rows> res{ U(0) };
 		for (int i = 0; i < Cols; i++)
 		{
-			res[i] = m[i] * v[i];
+			res[i] += m[i] * v[i];
 		}
 		return res;
 	}

@@ -105,6 +105,9 @@ namespace numa
 	template<typename U, int S>
 	Vec<T, 3>::Vec(const Vec<U, S>& v)
 	{
+		// components[0] = components[1] = components[2] = T(0);
+		x = y = z = T(0);
+
 		int minDimensions = std::min(3, S);
 		for (int i = 0; i < minDimensions; i++)
 		{

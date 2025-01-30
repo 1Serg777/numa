@@ -78,16 +78,18 @@ namespace numa
 		T components[S];
 	};
 
+	// Forward declarations
+
+	template<typename T, typename U, int S>
+	void Fill(const Vec<T, S>& v, const U& u);
+
 	// Constructors
 
 	template<typename T, int S>
 	template<typename U>
 	Vec<T, S>::Vec(const U& u)
 	{
-		for (int i = 0; i < S; i++)
-		{
-			components[i] = static_cast<T>(u);
-		}
+		Fill(*this, static_cast<T>(u));
 	}
 
 	// Converting constructors
@@ -96,6 +98,8 @@ namespace numa
 	template<typename U, int S2>
 	Vec<T, S1>::Vec(const Vec<U, S2>& v)
 	{
+		Fill(*this, T(0));
+
 		int minDimensions = std::min(S1, S2);
 		for (int i = 0; i < minDimensions; i++)
 		{
@@ -119,6 +123,10 @@ namespace numa
 		return v;
 	}
 	*/
+
+	// Private functions
+
+	// -----
 
 	// Operators
 
@@ -320,5 +328,11 @@ namespace numa
 	Vec<T, Size> Normalize(const Vec<T, Size>& v)
 	{
 		return v / Length(v);
+	}
+
+	template<typename T, typename U, int Size>
+	void Fill(Vec<T, Size>& v, const U& u)
+	{
+		std::fill(v.Data(), v.Data() + Size, static_cast<T>(u));
 	}
 }
