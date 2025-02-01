@@ -106,7 +106,6 @@ namespace numa
 				column_type columns[2];
 			};
 		};
-
 	};
 
 	// Constructors
