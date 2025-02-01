@@ -52,6 +52,12 @@ void TestVec()
     numa::Vec<float, 3> positionV3{ 0.0f };
 
     numa::Vec<float, 8> positionV8 = positionV5;
+    numa::Vec<float, 8> positionV8_2{};
+    numa::Vec<float, 8> positionV8_3;
+
+    float flRes = float{ 1.0f } + double{ 3.0 };
+    numa::Vec<float, 3> flSumRes1 = positionV3 + numa::Vec<double, 3>{ 1.0 };
+    // numa::Vec<float, 3> flSumRes1 = positionV3 + numa::Vec<double, 4>{ 1.0 }; // won't compile
 
     positionV3 = positionV5;
     positionV5 = positionV3;
@@ -74,6 +80,7 @@ void TestVec()
     numa::Vec2 uv4{ origin };
     numa::Vec2 uv5 = numa::Vec2{ positionV3 };
     numa::Vec2 uv6 = positionV5;
+    numa::Vec2 uv7;
 
     // Vec3 tests
 
@@ -103,6 +110,11 @@ void TestVec()
 
     // Additional tests
 
+    // numa::Vec3 sumRes = numa::Vec3{ 1.0f } + numa::Vec2{ 2.5f }; // won't compile!
+    numa::Vec3 sumRes = numa::Vec3{ 1.0f } + numa::Vec3{ numa::Vec2{ 2.5f } };
+
+    numa::Vec3{ 1.0f } + numa::dVec3{ 2 };
+
     numa::Vec2 imgUv{ 0.25, 0.15 };
 
     numa::Vec3 pos = imgUv;
@@ -124,6 +136,8 @@ void TestMat()
     numa::Mat<float, 3, 5> m1{ 1 };
     numa::Mat<int, 3, 5> m2{ 1.0f };
     numa::Mat<int, 3, 3> m3{ 1.0f };
+    numa::Mat<int, 3, 5> m2_2;
+    numa::Mat<int, 3, 3> m3_2;
 
     numa::Mat<float, 3, 5> m1m2addRes = m1 + m2;
     numa::Mat<double, 3, 5> m1m2addRes2 = m1 + m2;
@@ -147,7 +161,11 @@ void TestMat()
     scale = m2I * 4.0f;
     scale = scale / 2;
 
+    // Implicit conversion check
 
+    double dv{ 2.0 };
+    int iv{ 1 };
+    auto av = iv + dv;
 
     // Mat3 tests
 

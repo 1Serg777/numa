@@ -15,18 +15,18 @@ namespace numa
 
 		// Constructors
 
-		Vec() = default;
-		~Vec() = default;
+		Vec() : components() {};
 
 		template<typename U>
 		Vec(const U& u);
+
 		template<typename X, typename Y>
 		Vec(const X& x, const Y& y);
 
 		// Converting constructors
 
-		template<typename U, int S>
-		Vec(const Vec<U, S>& v);
+		template<typename U, int S2>
+		Vec(const Vec<U, S2>& v);
 
 		// Operators
 
@@ -97,13 +97,11 @@ namespace numa
 	// Converting constructors
 
 	template<typename T>
-	template<typename U, int S>
-	Vec<T, 2>::Vec(const Vec<U, S>& v)
+	template<typename U, int S2>
+	Vec<T, 2>::Vec(const Vec<U, S2>& v)
+		: components()
 	{
-		// components[0] = components[1] = T(0);
-		x = y = T(0);
-
-		int minDimensions = std::min(2, S);
+		int minDimensions = std::min(2, S2);
 		for (int i = 0; i < minDimensions; i++)
 		{
 			components[i] = static_cast<T>(v[i]);

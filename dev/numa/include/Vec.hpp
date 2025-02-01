@@ -14,8 +14,7 @@ namespace numa
 
 		// Constructors
 
-		Vec() = default;
-		~Vec() = default;
+		Vec() : components() {};
 
 		template<typename U>
 		Vec(const U& u);
@@ -24,13 +23,6 @@ namespace numa
 
 		template<typename U, int S2>
 		Vec(const Vec<U, S2>& v);
-
-		// Conversion functions
-
-		/*
-		template<typename U, int S>
-		operator Vec<U, S>() const;
-		*/
 
 		// Operators
 
@@ -53,7 +45,6 @@ namespace numa
 
 		template<typename U>
 		Vec<T, S>& operator/=(const U& u);
-
 
 		T& operator[](int idx)
 		{
@@ -78,18 +69,13 @@ namespace numa
 		T components[S];
 	};
 
-	// Forward declarations
-
-	template<typename T, typename U, int S>
-	void Fill(const Vec<T, S>& v, const U& u);
-
 	// Constructors
 
 	template<typename T, int S>
 	template<typename U>
 	Vec<T, S>::Vec(const U& u)
 	{
-		Fill(*this, static_cast<T>(u));
+		std::fill(Data(), Data() + S, static_cast<T>(u));
 	}
 
 	// Converting constructors
@@ -97,36 +83,14 @@ namespace numa
 	template<typename T, int S1>
 	template<typename U, int S2>
 	Vec<T, S1>::Vec(const Vec<U, S2>& v)
+		: components()
 	{
-		Fill(*this, T(0));
-
 		int minDimensions = std::min(S1, S2);
 		for (int i = 0; i < minDimensions; i++)
 		{
 			components[i] = static_cast<T>(v[i]);
 		}
 	}
-
-	// Conversion functions
-
-	/*
-	template<typename T, int S1>
-	template<typename U, int S2>
-	Vec<T, S1>::operator Vec<U, S2>() const
-	{
-		Vec<U, S2> v{};
-		int dimensions = std::min(S1, S2);
-		for (int i = 0; i < dimensions; i++)
-		{
-			v[i] = static_cast<U>(components[i]);
-		}
-		return v;
-	}
-	*/
-
-	// Private functions
-
-	// -----
 
 	// Operators
 
@@ -211,88 +175,110 @@ namespace numa
 
 	// 2) Defined as separate functions
 
-	template<typename T, typename U, int Size>
-	Vec<T, Size> operator+(const Vec<T, Size>& v1, const Vec<U, Size>& v2)
+	template<typename T, typename U, int S>
+	Vec<T, S> operator+(const Vec<T, S>& v1, const Vec<U, S>& v2)
 	{
-		Vec<T, Size> res{};
-		for (int i = 0; i < Size; i++)
+		Vec<T, S> res{};
+		for (int i = 0; i < S; i++)
 		{
 			res[i] = v1[i] + static_cast<T>(v2[i]);
 		}
 		return res;
 	}
 
-	template<typename T, typename U, int Size>
-	Vec<T, Size> operator-(const Vec<T, Size>& v1, const Vec<U, Size>& v2)
+	template<typename T, typename U, int S>
+	Vec<T, S> operator-(const Vec<T, S>& v1, const Vec<U, S>& v2)
 	{
-		Vec<T, Size> res{};
-		for (int i = 0; i < Size; i++)
+		Vec<T, S> res{};
+		for (int i = 0; i < S; i++)
 		{
 			res[i] = v1[i] - static_cast<T>(v2[i]);
 		}
 		return res;
 	}
 
-	template<typename T, typename U, int Size>
-	Vec<T, Size> operator*(const Vec<T, Size>& v, const U& u)
+	template<typename T, typename U, int S>
+	Vec<T, S> operator*(const Vec<T, S>& v, const U& u)
 	{
-		Vec<T, Size> res{};
-		for (int i = 0; i < Size; i++)
+		Vec<T, S> res{};
+		for (int i = 0; i < S; i++)
 		{
 			res[i] = v[i] * static_cast<T>(u);
 		}
 		return res;
 	}
 
-	template<typename T, typename U, int Size>
-	Vec<T, Size> operator*(const U& u, const Vec<T, Size>& v)
+	template<typename T, typename U, int S>
+	Vec<T, S> operator*(const U& u, const Vec<T, S>& v)
 	{
-		Vec<T, Size> res{};
-		for (int i = 0; i < Size; i++)
+		Vec<T, S> res{};
+		for (int i = 0; i < S; i++)
 		{
 			res[i] = static_cast<T>(u) * v[i];
 		}
 		return res;
 	}
 
-	template<typename T, typename U, int Size>
-	Vec<T, Size> operator*(const Vec<T, Size>& v1, const Vec<U, Size>& v2)
+	template<typename T, typename U, int S>
+	Vec<T, S> operator*(const Vec<T, S>& v1, const Vec<U, S>& v2)
 	{
-		Vec<T, Size> res{};
-		for (int i = 0; i < Size; i++)
+		Vec<T, S> res{};
+		for (int i = 0; i < S; i++)
 		{
 			res[i] = v1[i] * static_cast<T>(v2[i]);
 		}
 		return res;
 	}
 
-	template<typename T, typename U, int Size>
-	Vec<T, Size> operator/(const Vec<T, Size>& v, const U& u)
+	template<typename T, typename U, int S>
+	Vec<T, S> operator/(const Vec<T, S>& v, const U& u)
 	{
-		Vec<T, Size> vec{};
-		for (int i = 0; i < Size; i++)
+		Vec<T, S> res{};
+		for (int i = 0; i < S; i++)
 		{
-			vec[i] = v[i] / static_cast<T>(u);
+			res[i] = v[i] / static_cast<T>(u);
 		}
-		return vec;
+		return res;
 	}
 
-	template<typename T, typename U, int Size>
-	Vec<T, Size> operator/(const Vec<T, Size>& v1, const Vec<U, Size>& v2)
+	template<typename T, typename U, int S>
+	Vec<T, S> operator/(const Vec<T, S>& v1, const Vec<U, S>& v2)
 	{
-		Vec<T, Size> res{};
-		for (int i = 0; i < Size; i++)
+		Vec<T, S> res{};
+		for (int i = 0; i < S; i++)
 		{
 			res[i] = v1[i] / static_cast<T>(v2[i]);
 		}
 		return res;
 	}
 
-	template<typename T, typename U, typename V, int Size>
-	Vec<T, Size> Clamp(const Vec<T, Size>& value, const Vec<U, Size>& low, const Vec<V, Size>& high)
+	template<typename T, typename U, int S>
+	Vec<T, S> Min(const Vec<T, S>& v1, const Vec<T, S>& v2)
 	{
-		Vec<T, Size> res{};
-		for (int i = 0; i < Size; i++)
+		Vec<T, S> res{};
+		for (int i = 0; i < S; i++)
+		{
+			res[i] = std::min(v1[i], v2[i]);
+		}
+		return res;
+	}
+
+	template<typename T, typename U, int S>
+	Vec<T, S> Max(const Vec<T, S>& v1, const Vec<T, S>& v2)
+	{
+		Vec<T, S> res{};
+		for (int i = 0; i < S; i++)
+		{
+			res[i] = std::max(v1[i], v2[i]);
+		}
+		return res;
+	}
+
+	template<typename T, typename U, typename V, int S>
+	Vec<T, S> Clamp(const Vec<T, S>& value, const Vec<U, S>& low, const Vec<V, S>& high)
+	{
+		Vec<T, S> res{};
+		for (int i = 0; i < S; i++)
 		{
 			res[i] = value[i];
 			res[i] = std::min(res[i], static_cast<T>(high[i]));
@@ -301,38 +287,32 @@ namespace numa
 		return res;
 	}
 
-	template<typename T, typename U, int Size>
-	T Dot(const Vec<T, Size>& v1, const Vec<U, Size>& v2)
+	template<typename T, typename U, int S>
+	T Dot(const Vec<T, S>& v1, const Vec<U, S>& v2)
 	{
 		T res{ 0 };
-		for (int i = 0; i < Size; i++)
+		for (int i = 0; i < S; i++)
 		{
 			res += v1[i] * static_cast<T>(v2[i]);
 		}
 		return res;
 	}
 
-	template<typename T, int Size>
-	T Length2(const Vec<T, Size>& v)
+	template<typename T, int S>
+	T Length2(const Vec<T, S>& v)
 	{
 		return Dot(v, v);
 	}
 
-	template<typename T, int Size>
-	T Length(const Vec<T, Size>& v)
+	template<typename T, int S>
+	T Length(const Vec<T, S>& v)
 	{
 		return static_cast<T>(std::sqrt(Length2(v)));
 	}
 
-	template<typename T, int Size>
-	Vec<T, Size> Normalize(const Vec<T, Size>& v)
+	template<typename T, int S>
+	Vec<T, S> Normalize(const Vec<T, S>& v)
 	{
 		return v / Length(v);
-	}
-
-	template<typename T, typename U, int Size>
-	void Fill(Vec<T, Size>& v, const U& u)
-	{
-		std::fill(v.Data(), v.Data() + Size, static_cast<T>(u));
 	}
 }

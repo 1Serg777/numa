@@ -3,8 +3,7 @@
 #include "Vec.hpp"
 
 #include <algorithm>
-// #include <cassert>
-// #include <type_traits>
+#include <type_traits>
 
 namespace numa
 {
@@ -28,7 +27,7 @@ namespace numa
 
 		// Constructors
 
-		Mat() = default;
+		Mat() : columns() {};
 
 		template<int R = Rows, int C = Cols, typename U, std::enable_if_t<R != C, bool> = true>
 		Mat(const U& u)
@@ -41,10 +40,10 @@ namespace numa
 
 		template<int R = Rows, int C = Cols, typename U, std::enable_if_t<R == C, bool> = true>
 		Mat(const U& u)
+			: columns()
 		{
 			for (int i = 0; i < Cols; i++)
 			{
-				columns[i] = column_type{ T(0) };
 				columns[i][i] = static_cast<T>(u);
 			}
 		}
@@ -93,42 +92,16 @@ namespace numa
 
 	// Constructors
 
-	/*
-	template<typename T, int Rows, int Cols>
-	template<int R, int C, typename U, std::enable_if_t<R != C, bool>>
-	Mat<T, Rows, Cols>::Mat(const U& u)
-	{
-		for (int col = 0; col < Cols; col++)
-		{
-			columns[col] = column_type{ u };
-		}
-	}
-
-	template<typename T, int Rows, int Cols>
-	template<int R, int C, typename U, std::enable_if_t<R == C, bool>>
-	Mat<T, Rows, Cols>::Mat(const U& u)
-	{
-		for (int i = 0; i < Cols; i++)
-		{
-			columns[i][i] = static_cast<T>(u);
-		}
-	}
-	*/
-
 	// Converting constructors
 
 	template<typename T, int Rows, int Cols>
 	template<typename U, int Rows2, int Cols2>
 	Mat<T, Rows, Cols>::Mat(const Mat<U, Rows2, Cols2>& mat)
+		: columns()
 	{
-		// int minRowsDim = std::min(Rows, Rows2);
 		int minColsDim = std::min(Cols, Cols2);
 		for (int i = 0; i < minColsDim; i++)
 		{
-			// for (int j = 0; j < minRowsDim; j++)
-			// {
-				// this->columns[i][j] = static_cast<T>(mat[i][j]);
-			// }
 			this->columns[i] = mat[i];
 		}
 	}
@@ -165,7 +138,7 @@ namespace numa
 	{
 		for (int i = 0; i < Cols; i++)
 		{
-			this->columns[i] *= static_cast<T>(u);
+			this->columns[i] *= u;
 		}
 		return *this;
 	}
@@ -176,33 +149,12 @@ namespace numa
 	{
 		for (int i = 0; i < Cols; i++)
 		{
-			this->columns[i] /= static_cast<T>(u);
+			this->columns[i] /= u;
 		}
 		return *this;
 	}
 
 	// 2) Defined as separate functions
-
-	// The `VecRows` template parameter is unnecessary.
-	// We can reuse the `MatCols` parameter for that.
-	// This way we can also avoid having to use the `std::enable_if` check
-	// in order to prevent multiplications when the column size of a matrix
-	// doesn't match the rows size of a vector.
-	/*
-	template<typename T, int MatRows, int MatCols, int VecRows,
-		std::enable_if_t<MatCols == VecRows, bool> = true>
-	Vec<T, MatRows> operator*(const Mat<T, MatRows, MatCols>& m, const Vec<T, VecRows>& v)
-	{
-		// assert(MatCols == VecRows && "The matrix column size doesn't match the vector row size!");
-
-		Vec<T, MatRows> res{ T(0) };
-		for (int i = 0; i < MatCols; i++)
-		{
-			res += m[i] * v[i];
-		}
-		return res;
-	}
-	*/
 
 	template<typename T, typename U, int Rows, int Cols>
 	Mat<T, Rows, Cols> operator+(const Mat<T, Rows, Cols>& m1, const Mat<U, Rows, Cols>& m2)
@@ -221,7 +173,7 @@ namespace numa
 		Mat<T, Rows, Cols> res{};
 		for (int i = 0; i < Cols; i++)
 		{
-			res[i] = m1[i] + m2[i];
+			res[i] = m1[i] - m2[i];
 		}
 		return res;
 	}
@@ -232,7 +184,7 @@ namespace numa
 		Mat<T, Rows, Cols> res{};
 		for (int i = 0; i < Cols; i++)
 		{
-			res[i] = m[i] * static_cast<T>(u);
+			res[i] = m[i] * u;
 		}
 		return res;
 	}
@@ -243,7 +195,7 @@ namespace numa
 		Mat<T, Rows, Cols> res{};
 		for (int i = 0; i < Cols; i++)
 		{
-			res[i] = static_cast<T>(u) * m[i];
+			res[i] = u * m[i];
 		}
 		return res;
 	}
@@ -251,7 +203,7 @@ namespace numa
 	template<typename T, typename U, int Rows, int Cols>
 	Vec<U, Rows> operator*(const Mat<T, Rows, Cols>& m, const Vec<U, Cols>& v)
 	{
-		Vec<U, Rows> res{ U(0) };
+		Vec<U, Rows> res{};
 		for (int i = 0; i < Cols; i++)
 		{
 			res[i] += m[i] * v[i];
@@ -265,7 +217,7 @@ namespace numa
 		Mat<T, Rows, Cols> res{};
 		for (int i = 0; i < Cols; i++)
 		{
-			res[i] = m[i] / static_cast<T>(u);
+			res[i] = m[i] / u;
 		}
 		return res;
 	}

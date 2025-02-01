@@ -15,11 +15,11 @@ namespace numa
 
 		// Constructors
 
-		Vec() = default;
-		~Vec() = default;
+		Vec() : components() {};
 
 		template<typename U>
 		Vec(const U& u);
+
 		template<typename X, typename Y, typename Z>
 		Vec(const X& x, const Y& y, const Z& z);
 
@@ -104,10 +104,8 @@ namespace numa
 	template<typename T>
 	template<typename U, int S>
 	Vec<T, 3>::Vec(const Vec<U, S>& v)
+		: components()
 	{
-		// components[0] = components[1] = components[2] = T(0);
-		x = y = z = T(0);
-
 		int minDimensions = std::min(3, S);
 		for (int i = 0; i < minDimensions; i++)
 		{
