@@ -145,7 +145,7 @@ namespace numa
 	template<typename T>
 	template<typename U, int Rows, int Cols>
 	Mat<T, 2, 2>::Mat(const Mat<U, Rows, Cols>& mat)
-		: components()
+		: Mat(T(1))
 	{
 		int minColsDim = std::min(2, Cols);
 		for (int i = 0; i < minColsDim; i++)

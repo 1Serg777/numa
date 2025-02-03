@@ -8,6 +8,11 @@
 #include "Vec4.hpp"
 #include "Mat.hpp"
 #include "Mat2.hpp"
+#include "Mat3.hpp"
+#include "Mat4.hpp"
+#include "Random.h"
+#include "Range.hpp"
+#include "Intersect.h"
 
 void TestNuma();
 void TestVec();
@@ -153,6 +158,10 @@ void TestMat()
     numa::Mat<float, 5, 6> matMultRes2 = 4 * matMult;
     numa::Mat<float, 7, 8> matMultRes3 = (matMult * 4) / 2;
 
+    numa::Mat<float, 8, 9> convConstTest1{ m1 };
+    numa::Mat<float, 9, 9> convConstTest2{ m2 };
+    numa::Mat<float, 9, 9> convConstTest3{ m3 };
+
     // Mat2 tests
 
     numa::Mat2 m2I{ 1.0f };
@@ -169,9 +178,63 @@ void TestMat()
 
     // Mat3 tests
 
-    // TODO
+    numa::Mat3 orient{ 1.0f };
+    numa::Mat3 orient2{
+        1.0f
+    };
+    numa::Mat3 orient3{ scale };
 
     // Mat4 tests
 
-    // TODO
+    numa::Mat4 world{
+        numa::Vec4{ 1.0f, 0.0f, 0.0f, 0.0f },
+        numa::Vec4{ 0.0f, 1.0f, 0.0f, 0.0f },
+        numa::Vec4{ 0.0f, 0.0f, 1.0f, 0.0f },
+        numa::Vec4{ 0.0f, 0.0f, 0.0f, 1.0f },
+    };
+
+    numa::Mat4 world2{
+        numa::Vec4{ numa::Vec3{ 1.0f, 0.0f, 0.0f } },
+        numa::Vec4{ numa::Vec3{ 0.0f, 1.0f, 0.0f } },
+        numa::Vec4{ numa::Vec3{ 0.0f, 0.0f, 1.0f } },
+        numa::Vec4{ 0.0f, 0.0f, 0.0f, 1.0f },
+    };
+
+    numa::Mat4 world3{
+        numa::Vec4{ numa::Vec3{ 1.0f, 0.0f, 0.0f }, 0.0f },
+        numa::Vec4{ numa::Vec3{ 0.0f, 1.0f, 0.0f }, 0.0f },
+        numa::Vec4{ numa::Vec3{ 0.0f, 0.0f, 1.0f } },
+        numa::Vec4{ 0.0f, 0.0f, 0.0f, 1.0f },
+    };
+
+    // Won't compile!
+    /*
+    numa::Mat4 world4{
+        numa::Vec3{ 1.0f, 0.0f, 0.0f },
+        numa::Vec3{ 0.0f, 1.0f, 0.0f },
+        numa::Vec3{ 0.0f, 0.0f, 1.0f },
+        numa::Vec4{ 0.0f, 0.0f, 0.0f, 1.0f },
+    };
+    numa::Mat4 world4_2{
+        numa::Vec3{ 1.0f, 0.0f, 0.0f },
+        numa::Vec3{ 0.0f, 1.0f, 0.0f },
+        numa::Vec3{ 0.0f, 0.0f, 1.0f },
+        numa::Vec3{ 0.0f, 0.0f, 0.0f },
+    };
+    */
+
+    numa::Mat4 world5{ orient };
+
+    numa::Mat3 orient6{
+        1, 2, 3,
+        4, 5, 6,
+        7, 8, 9
+    };
+    numa::Mat4 world6{
+        orient6,
+        numa::Vec3{ 0.5f, 0.5, 0.5f }
+    };
+
+    numa::Mat<float, 5, 5> world_5_5{ world6 };
+    numa::Mat<float, 5, 6> world_5_6{ world6 };
 }

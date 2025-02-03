@@ -50,8 +50,27 @@ namespace numa
 
 		// Converting constructors
 
-		template<typename U, int Rows2, int Cols2>
-		Mat(const Mat<U, Rows2, Cols2>& mat);
+		template<int R = Rows, int C = Cols, int Rows2, int Cols2, typename U, std::enable_if_t<R != C, bool> = true>
+		Mat(const Mat<U, Rows2, Cols2>& mat)
+			: columns()
+		{
+			int minColsDim = std::min(Cols, Cols2);
+			for (int i = 0; i < minColsDim; i++)
+			{
+				this->columns[i] = mat[i];
+			}
+		}
+
+		template<int R = Rows, int C = Cols, int Rows2, int Cols2, typename U, std::enable_if_t<R == C, bool> = true>
+		Mat(const Mat<U, Rows2, Cols2>& mat)
+			: Mat(T(1))
+		{
+			int minColsDim = std::min(Cols, Cols2);
+			for (int i = 0; i < minColsDim; i++)
+			{
+				this->columns[i] = mat[i];
+			}
+		}
 
 		// Operators
 
@@ -89,22 +108,6 @@ namespace numa
 
 		column_type columns[Cols];
 	};
-
-	// Constructors
-
-	// Converting constructors
-
-	template<typename T, int Rows, int Cols>
-	template<typename U, int Rows2, int Cols2>
-	Mat<T, Rows, Cols>::Mat(const Mat<U, Rows2, Cols2>& mat)
-		: columns()
-	{
-		int minColsDim = std::min(Cols, Cols2);
-		for (int i = 0; i < minColsDim; i++)
-		{
-			this->columns[i] = mat[i];
-		}
-	}
 
 	// Operators
 

@@ -48,6 +48,9 @@ namespace numa
 			const Vec<Z, 4>& z,  // column #2
 			const Vec<W, 4>& w); // column #3
 
+		template<typename U, typename V>
+		Mat(const Mat<U, 3, 3>& m, const Vec<V, 3>& v);
+
 		// Converting constructors
 
 		template<typename U, int Rows, int Cols>
@@ -178,12 +181,22 @@ namespace numa
 		this->translation = w;
 	}
 
+	template<typename T>
+	template<typename U, typename V>
+	Mat<T, 4, 4>::Mat(const Mat<U, 3, 3>& m, const Vec<V, 3>& v)
+	{
+		this->right = m[0]; // equivalent to: this->forward = column_type{ m[0], 0 };
+		this->up = m[1]; // equivalent to: this->forward = column_type{ m[1], 0 };
+		this->forward = m[2]; // equivalent to: this->forward = column_type{ m[2], 0 };
+		this->translation = column_type{ v, 1 };
+	}
+
 	// Converting constructors
 
 	template<typename T>
 	template<typename U, int Rows, int Cols>
 	Mat<T, 4, 4>::Mat(const Mat<U, Rows, Cols>& mat)
-		: components()
+		: Mat(T(1))
 	{
 		int minColsDim = std::min(4, Cols);
 		for (int i = 0; i < minColsDim; i++)
