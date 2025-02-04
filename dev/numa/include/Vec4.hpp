@@ -159,10 +159,10 @@ namespace numa
 	Vec<T, 4> Vec<T, 4>::operator-() const
 	{
 		Vec<T, 4> res{};
-		res.x = -this.x;
-		res.y = -this.y;
-		res.z = -this.z;
-		res.w = -this.w;
+		res.x = -this->x;
+		res.y = -this->y;
+		res.z = -this->z;
+		res.w = -this->w;
 		return res;
 	}
 
