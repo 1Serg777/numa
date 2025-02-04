@@ -39,8 +39,8 @@ namespace numa
 	};
 
 	// 1) When there's only one hit:
-	//    - If the ray is 'in front', T1 contains the result (positive) (or 0?)
-	//    - If the ray is 'behind',   T1 contains the result (negative) (or 0?)
+	//    - If the ray is 'in front', T1 contains the result (positive)
+	//    - If the ray is 'behind',   T1 contains the result (negative)
 	//    - If the ray is 'inside'    we can't have only one intersection when the ray is inside the sphere
 	// 2) When there're two hits:
 	//    - If the ray is 'in front', T2 is the closest and T1 is the farthest

@@ -28,28 +28,57 @@ namespace numa
 
 	bool RaySphereHit::HitInFront() const
 	{
-		bool condition1 = hitDistanceT1 > 0.0f && hitDistanceT2 >= 0.0f;
-		bool condition2 = hitDistanceT1 > hitDistanceT2; // t2 is the closest // unnecessary?
-		return hit && condition1 && condition2;
+		if (SingleHit())
+		{
+			return hitDistanceT1 >= 0.0f;
+		}
+		else if (DoubleHit())
+		{
+			bool condition1 = hitDistanceT1 > 0.0f && hitDistanceT2 >= 0.0f;
+			bool condition2 = hitDistanceT1 > hitDistanceT2; // t2 is the closest // unnecessary?
+			return hit && condition1 && condition2;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	bool RaySphereHit::HitBehind() const
 	{
-		bool condition1 = hitDistanceT1 <= 0.0f && hitDistanceT2 < 0.0f;
-		bool condition2 = hitDistanceT1 > hitDistanceT2; // t1 is the closest // unnecessary?
-		return hit && condition1 && condition2;
+		if (SingleHit())
+		{
+			return hitDistanceT1 < 0.0f;
+		}
+		else if (DoubleHit())
+		{
+			bool condition1 = hitDistanceT1 <= 0.0f && hitDistanceT2 < 0.0f;
+			bool condition2 = hitDistanceT1 > hitDistanceT2; // t1 is the closest // unnecessary?
+			return hit && condition1 && condition2;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	bool RaySphereHit::HitInside() const
 	{
-		bool condition1 = hitDistanceT1 > 0.0f && hitDistanceT2 < 0.0f;
-		bool condition2 = hitDistanceT1 > hitDistanceT2; // t1 is in front, t2 is behind // unnecessary?
+		if (DoubleHit())
+		{
+			bool condition1 = hitDistanceT1 > 0.0f && hitDistanceT2 < 0.0f;
+			bool condition2 = hitDistanceT1 > hitDistanceT2; // t1 is in front, t2 is behind // unnecessary?
 
-		// In order to determine which t is the closest and which one is the farthest
-		// we need to realize that since the ray's origin is inside the sphere and 
-		// t tells us the distance along the ray to the intersection point, we can
-		// simply compare the absolute values of the two roots. The one that is smaller
-		// is the closest intersection.
+			// In order to determine which t is the closest and which one is the farthest
+			// we need to realize that since the ray's origin is inside the sphere and 
+			// t tells us the distance along the ray to the intersection point, we can
+			// simply compare the absolute values of the two roots. The one that is smaller
+			// is the closest intersection.
 
-		return hit && condition1 && condition2;
+			return hit && condition1 && condition2;
+		}
+		else /* if (!hit || SingleHit()) */
+		{
+			return false;
+		}
 	}
 
 	bool RaySphereHit::SingleHit() const
