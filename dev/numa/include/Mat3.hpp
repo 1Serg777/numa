@@ -3,6 +3,8 @@
 #include "Mat.hpp"
 #include "Vec3.hpp"
 
+#include <cmath>
+
 namespace numa
 {
 	template<typename T>
@@ -163,7 +165,7 @@ namespace numa
 	template<typename T>
 	template<typename U, int Rows, int Cols>
 	Mat<T, 3, 3>::Mat(const Mat<U, Rows, Cols>& mat)
-		: components()
+		: columns()
 	{
 		int minColsDim = std::min(3, Cols);
 		for (int i = 0; i < minColsDim; i++)
@@ -224,4 +226,46 @@ namespace numa
 	// Common type definitions
 
 	using Mat3 = Mat<float, 3, 3>;
+
+	// Helper functions
+
+	inline Mat3 Pitch(float pitch_rad)
+	{
+		return Mat3{
+			Vec3{ 1.0f,                  0.0f,                 0.0f }, // column #1
+			Vec3{ 0.0f,  std::cosf(pitch_rad), std::sinf(pitch_rad) }, // column #2
+			Vec3{ 0.0f, -std::sinf(pitch_rad), std::cosf(pitch_rad) }, // column #3
+		};
+	}
+	inline Mat3 Yaw(float yaw_rad)
+	{
+		return Mat3{
+			Vec3{ std::cosf(yaw_rad), 0.0f, -std::sinf(yaw_rad) }, // column #1
+			Vec3{               0.0f, 1.0f,                0.0f }, // column #2
+			Vec3{ std::sinf(yaw_rad), 0.0f,  std::cosf(yaw_rad) }, // column #3
+		};
+	}
+	inline Mat3 Roll(float roll_rad)
+	{
+		return Mat3{
+			Vec3{  std::cosf(roll_rad), std::sinf(roll_rad), 0.0f }, // column #1
+			Vec3{ -std::sinf(roll_rad), std::cosf(roll_rad), 0.0f }, // column #2
+			Vec3{                 0.0f,                0.0f, 1.0f }, // column #3
+		};
+	}
+
+	inline Mat3 RotateEulerAngles(const Vec3& eulerAnglesRad)
+	{
+		Mat3 pitch = Pitch(eulerAnglesRad.x);
+		Mat3 yaw = Yaw(eulerAnglesRad.y);
+		Mat3 roll = Roll(eulerAnglesRad.z);
+
+		// 1.
+
+		// Mat3 rot = pitch * roll;
+		// rot *= yaw; // [TODO]
+		// return rot;
+
+		return yaw * pitch * roll;
+	}
 }

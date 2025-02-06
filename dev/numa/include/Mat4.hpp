@@ -53,6 +53,9 @@ namespace numa
 		template<typename U, int Rows, int Cols>
 		Mat(const Mat<U, Rows, Cols>& mat);
 
+		template<typename U, typename V>
+		Mat(const Mat<U, 3, 3>& mat, const Vec<V, 3>& vec);
+
 		// Operators
 
 		template<typename U>
@@ -190,6 +193,16 @@ namespace numa
 		{
 			this->columns[i] = mat[i];
 		}
+	}
+
+	template<typename T>
+	template<typename U, typename V>
+	Mat<T, 4, 4>::Mat(const Mat<U, 3, 3>& mat, const Vec<V, 3>& vec)
+	{
+		this->right       = column_type{ mat[0], 0 };
+		this->up          = column_type{ mat[1], 0 };
+		this->forward     = column_type{ mat[2], 0 };
+		this->translation = column_type{    vec, 1 };
 	}
 
 	// Operators

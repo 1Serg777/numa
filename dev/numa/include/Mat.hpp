@@ -206,7 +206,7 @@ namespace numa
 		Vec<U, Rows> res{};
 		for (int i = 0; i < Cols; i++)
 		{
-			res[i] += m[i] * v[i];
+			res += m[i] * v[i];
 		}
 		return res;
 	}
@@ -219,6 +219,26 @@ namespace numa
 		{
 			res[i] = m[i] / u;
 		}
+		return res;
+	}
+
+	template<
+		typename T, int M, int N,
+		typename U, int K>
+	Mat<T, M, K> operator*(const Mat<T, M, N>& mat1, const Mat<U, N, K>& mat2)
+	{
+		Mat<T, M, K> res{};
+
+		// We can view matrix-matrix multiplication [M, N]x[N, K] as
+		// K linear combinations of the column vectors of the first matrix.
+		// These K linear combinations, which are m-dimensional column vectors,
+		// form the resulting [M, K] matrix.
+
+		for (int i = 0; i < K; i++)
+		{
+			res[i] = mat1 * mat2[i];
+		}
+
 		return res;
 	}
 }
