@@ -315,4 +315,34 @@ namespace numa
 	{
 		return v / Length(v);
 	}
+
+	template<
+		typename T, typename U, int S,
+		std::enable_if_t<std::is_floating_point_v<T>&& std::is_floating_point_v<U>, bool> = true>
+	Vec<T, S> Pow(const Vec<T, S>& v, const U& p)
+	{
+		Vec<T, S> res{};
+
+		for (int i = 0; i < S; i++)
+		{
+			res[i] = static_cast<T>(std::pow(v[i], p));
+		}
+
+		return res;
+	}
+
+	template<
+		typename T, int S,
+		std::enable_if_t<std::is_floating_point_v<T>, bool> = true>
+	Vec<T, S> Sqrt(const Vec<T, S>& v)
+	{
+		Vec<T, S> res{};
+
+		for (int i = 0; i < S; i++)
+		{
+			res[i] = static_cast<T>(std::sqrt(v[i]));
+		}
+
+		return res;
+	}
 }

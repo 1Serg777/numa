@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Vec.hpp"
+
+#include <cmath>
 #include <type_traits>
 
 namespace numa
