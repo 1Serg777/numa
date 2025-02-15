@@ -46,7 +46,7 @@ namespace numa
 	//    - If the ray is 'in front', T2 is the closest and T1 is the farthest
 	//    - If the ray is 'behind',   T1 is the closest and T2 is the farthest
 	//    - If the ray is 'inside',   The T root with smallest absolute value is the closest (either in front or behind)
-	//                                The other one therefore is the farthest
+	//                                T2 is behind (negative), while T1 is in front (positive)
 	struct RaySphereHit
 	{
 		bool  HitInFront() const;
