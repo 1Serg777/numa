@@ -9,9 +9,9 @@ namespace numa
 {
 	namespace internal
 	{
-		double PiConst();
-		double PiOverTwoConst();
-		double TwoPiConst();
+		constexpr double PiConst();
+		constexpr double PiOverTwoConst();
+		constexpr double TwoPiConst();
 
 		double ToRad(double deg);
 		double ToDeg(double rad);
@@ -20,23 +20,25 @@ namespace numa
 	template<
 		typename T,
 		std::enable_if_t<std::is_floating_point_v<T>, bool> = true>
-	T Pi()
+	constexpr T Pi()
 	{
-		return static_cast<T>(internal::PiConst());
+		return static_cast<T>(3.1415926535897932384626433832795);		
 	}
+
 	template<
 		typename T,
 		std::enable_if_t<std::is_floating_point_v<T>, bool> = true>
-	T PiOverTwo()
+	constexpr T PiOverTwo()
 	{
-		return static_cast<T>(internal::PiOverTwoConst());
+		return static_cast<T>(Pi<double>() / 2.0);
 	}
+
 	template<
 		typename T,
 		std::enable_if_t<std::is_floating_point_v<T>, bool> = true>
-	T TwoPi()
+	constexpr T TwoPi()
 	{
-		return static_cast<T>(internal::TwoPiConst());
+		return static_cast<T>(2.0 * Pi<double>());
 	}
 
 	template<
@@ -46,6 +48,7 @@ namespace numa
 	{
 		return static_cast<T>(internal::ToRad(static_cast<T>(deg)));
 	}
+
 	template<
 		typename T,
 		std::enable_if_t<std::is_floating_point_v<T>, bool> = true>

@@ -21,15 +21,15 @@ namespace numa
 
 	namespace internal
 	{
-		double PiConst()
+		constexpr double PiConst()
 		{
 			return constants::Pi;
 		}
-		double PiOverTwoConst()
+		constexpr double PiOverTwoConst()
 		{
 			return constants::PiOverTwo;
 		}
-		double TwoPiConst()
+		constexpr double TwoPiConst()
 		{
 			return constants::TwoPi;
 		}
