@@ -345,4 +345,19 @@ namespace numa
 
 		return res;
 	}
+
+	template<
+		typename T, int S,
+		std::enable_if_t<std::is_floating_point_v<T>, bool> = true>
+	Vec<T, S> Exp(const Vec<T, S>& v)
+	{
+		Vec<T, S> res{};
+
+		for (int i = 0; i < S; i++)
+		{
+			res[i] = static_cast<T>(std::exp(v[i]));
+		}
+
+		return res;
+	}
 }
