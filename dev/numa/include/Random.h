@@ -1,10 +1,9 @@
 #pragma once
 
-#include "Vec2.hpp"
-#include "Vec3.hpp"
+#include "Vec.hpp"
 
-namespace numa
-{
+namespace numa {
+
 	// [0, 1)
 	double RandomDouble();
 	double RandomDouble(double min, double max);
@@ -40,4 +39,5 @@ namespace numa
 	// [-radius, radius) for each component with the condition
 	// that the length of the resulting vector is <= radius
 	Vec3 RandomInSphere(double radius);
+
 }
