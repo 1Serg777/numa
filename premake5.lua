@@ -9,22 +9,20 @@ local numa_project_src_path = dev_path .. "/numa/src"
 local sandbox_project_include_path = dev_path .. "/sandbox/include"
 local sandbox_project_src_path = dev_path .. "/sandbox/src"
 
-workspace ( "numa" )
-   configurations ( { "Debug", "Release" } )
-   platforms ( { "x64" } )
-   location ( build_path )
+workspace("numa")
+   configurations({"Debug", "Release"})
+   platforms     ({"x64"})
+   location      (build_path)
+   startproject  ("sandbox")
 
-   -- filter ( { "system:windows", "action:vs*" } )
-   startproject ("sandbox")
+project("numa")
+   kind      ("StaticLib")
+   language  ("C++")
+   cppdialect("C++17")
+   location  (build_path .. "/numa")
 
-project ( "numa" )
-   kind ( "StaticLib" )
-   language ( "C++" )
-   cppdialect ( "C++17" )
-   location ( build_path .. "/numa" )
-
-   targetdir ( build_path .. "/bin/%{cfg.platform}-%{cfg.buildcfg}" )
-   objdir ( build_path .. "/bin-int/numa/%{cfg.platform}-%{cfg.buildcfg}" )
+   targetdir(build_path .. "/bin/%{cfg.platform}-%{cfg.buildcfg}")
+   objdir   (build_path .. "/bin-int/numa/%{cfg.platform}-%{cfg.buildcfg}")
 
    includedirs {
       numa_project_include_path
@@ -36,15 +34,15 @@ project ( "numa" )
       numa_project_src_path .. "/**.cpp"
    }
 
-   filter ( "configurations:Debug" )
-      defines ( { "DEBUG", "_DEBUG" } )
-      symbols ( "On" )
+   filter("configurations:Debug")
+      defines({"DEBUG", "_DEBUG"})
+      symbols("On")
 
-   filter ( "configurations:Release" )
-      defines ( { "NDEBUG", "_NDEBUG" } )
-      optimize ( "On" )
+   filter("configurations:Release")
+      defines({"NDEBUG", "_NDEBUG"})
+      optimize("On")
 
-   filter ( { "system:windows", "action:vs*" } )
+   filter({"system:windows", "action:vs*"})
       vpaths {
          ["Include/*"] = {
             numa_project_include_path .. "/**.h",
@@ -55,14 +53,14 @@ project ( "numa" )
          },
       }
 
-project ( "sandbox" )
-   kind ( "ConsoleApp" )
-   language ( "C++" )
-   cppdialect ( "C++17" )
-   location ( build_path .. "/sandbox" )
+project("sandbox")
+   kind      ("ConsoleApp")
+   language  ("C++")
+   cppdialect("C++17")
+   location  (build_path .. "/sandbox")
 
-   targetdir ( build_path .. "/bin/%{cfg.platform}-%{cfg.buildcfg}" )
-   objdir ( build_path .. "/bin-int/sandbox/%{cfg.platform}-%{cfg.buildcfg}" )
+   targetdir(build_path .. "/bin/%{cfg.platform}-%{cfg.buildcfg}")
+   objdir   (build_path .. "/bin-int/sandbox/%{cfg.platform}-%{cfg.buildcfg}")
 
    includedirs {
       numa_project_include_path,
@@ -82,15 +80,15 @@ project ( "sandbox" )
       sandbox_project_src_path .. "/**.cpp"
    }
 
-   filter ( "configurations:Debug" )
-      defines ( { "DEBUG", "_DEBUG" } )
-      symbols ( "On" )
+   filter ("configurations:Debug")
+      defines({"DEBUG", "_DEBUG"})
+      symbols("On")
 
-   filter ( "configurations:Release" )
-      defines ( { "NDEBUG", "_NDEBUG" } )
-      optimize ( "On" )
+   filter("configurations:Release")
+      defines ({"NDEBUG", "_NDEBUG"})
+      optimize("On")
 
-   filter ( { "system:windows", "action:vs*" } )
+   filter({"system:windows", "action:vs*"})
       vpaths {
          ["Include/*"] = {
             sandbox_project_include_path .. "/**.h",
