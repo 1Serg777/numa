@@ -4,22 +4,6 @@
 
 namespace numa {
 
-	Vec3 Sphere::ComputeNormal(const Vec3& point) const {
-		Vec3 radiusVector = point - center;
-		// 1. Assume that 'point' lies on the sphere
-		// Vec3 normalVector = radiusVector / radius;
-		// 2. Accept any point
-		Vec3 normalVector = numa::Normalize(radiusVector);
-		return normalVector;
-	}
-
-	Plane::Plane(const Vec3& normal, float distance)
-		: normal(normal), distance(distance) {
-	}
-	Plane::Plane(const Vec3& normal, const Vec3& point)
-		: Plane(normal, Dot(normal, point)) {
-	}
-
 	bool RaySphereHit::HitInFront() const {
 		bool condition1 = hitDistanceT1 > 0.0f && hitDistanceT2 >= 0.0f;
 		bool condition2 = hitDistanceT1 > hitDistanceT2; // t2 is the closest // unnecessary?

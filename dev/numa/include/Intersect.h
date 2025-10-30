@@ -2,35 +2,13 @@
 
 #include "Vec.hpp"
 #include "Ray.h"
+#include "Shape.h"
 
 #include <limits>
 
 namespace numa
 {
-	struct Sphere {
-		Vec3  ComputeNormal(const Vec3& point) const;
-
-		Vec3  center{};
-		float radius{};
-	};
-
-	struct Plane {
-		Plane(const Vec3& normal, float distance);
-		Plane(const Vec3& normal, const Vec3& point);
-
-		Vec3  normal{};
-		float distance{};
-	};
-
-	struct Triangle {
-		Vec3 normal{};
-		// 1. 2 Vec2 vectors?
-		//    For an ABC triangle, the vectors are
-		//    B-A and C-A
-		// 2. 3 Vec3 points?
-		//    For an ABC triangle, the points are
-		//    A, B, and C
-	};
+	
 
 	// 1) When there's only one hit:
 	//    - If the ray is 'in front', T1 contains the result (positive) (or 0?)
