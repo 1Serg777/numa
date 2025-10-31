@@ -26,7 +26,6 @@ namespace numa {
 	void Triangle::ComputeNormal() {
 		numa::Vec3 AB = B - A;
 		numa::Vec3 AC = C - A;
-
 		N = numa::Normalize(numa::Cross(AB, AC));
 	}
 

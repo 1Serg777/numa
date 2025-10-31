@@ -47,16 +47,16 @@ namespace numa {
 
 		std::array<numa::Vec3, 8> GetAABBVertexPositions() const;
 
-		numa::Vec3 center{ 0.0f };
-		numa::Vec3 radius{ 0.5f };
+		numa::Vec3 center{0.0f};
+		numa::Vec3 radius{0.5f};
 	};
 
 	struct OBB {
 		numa::Mat4 ConstructWorldMatrix() const;
 
-		numa::Vec3 center{ 0.0f };
-		numa::Mat3 rotMat{ 1.0f };
-		numa::Vec3 radius{ 0.5f };
+		numa::Vec3 center{0.0f};
+		numa::Mat3 rotMat{1.0f};
+		numa::Vec3 radius{0.5f};
 	};
 
 	// Points must not be collinear, and the order is assumed to be CCW.
