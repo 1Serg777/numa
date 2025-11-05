@@ -1,5 +1,7 @@
 #include "Shape.h"
 
+#include <array>
+
 namespace numa {
 
 	Vec3 Sphere::ComputeNormal(const Vec3& point) const {
@@ -31,6 +33,46 @@ namespace numa {
 
 	Plane Triangle::GetTrianglePlane() const {
 		return Plane{ComputePlane(A, B, C)};
+	}
+
+	void AABB::InitializeFromMinMax(const numa::Vec3& min, const numa::Vec3& max) {
+		this->center = ComputeCenterFromMinMax(min, max);
+		this->radius = ComputeRadiusFromMinMax(min, max);
+	}
+
+	numa::Vec3 AABB::MinPoint() const {
+		return center - radius;
+	}
+	numa::Vec3 AABB::MaxPoint() const {
+		return center + radius;
+	}
+
+	std::array<numa::Vec3, 8> AABB::GetAABBVertexPositions() const {
+		std::array<numa::Vec3, 8> vertexPositions{};
+		numa::Vec3 min = MinPoint();
+		numa::Vec3 max = MaxPoint();
+
+		vertexPositions[0] = numa::Vec3{min.x, min.y, min.z};
+		vertexPositions[1] = numa::Vec3{min.x, min.y, max.z};
+
+		vertexPositions[2] = numa::Vec3{min.x, max.y, min.z};
+		vertexPositions[3] = numa::Vec3{min.x, max.y, max.z};
+
+		vertexPositions[4] = numa::Vec3{max.x, min.y, min.z};
+		vertexPositions[5] = numa::Vec3{max.x, min.y, max.z};
+
+		vertexPositions[6] = numa::Vec3{max.x, max.y, min.z};
+		vertexPositions[7] = numa::Vec3{max.x, max.y, max.z};
+
+		return vertexPositions;
+	}
+
+	numa::Mat4 OBB::ConstructWorldMatrix() const {
+		// Scale is only needed when we're rendering OBBs using the unit cube.
+		// numa::Mat4 scale = numa::Scale(numa::Mat4{1.0f}, this->radius);
+		numa::Mat4 world = this->rotMat;
+		world[3] = numa::Vec4{this->center, 1.0f};
+		return world;
 	}
 
 	Plane ComputePlane(const numa::Vec3& A, const numa::Vec3& B, const numa::Vec3& C) {
