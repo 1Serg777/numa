@@ -151,8 +151,18 @@ namespace numa {
 
 		template<typename U>
 		Vec(const Vec<U, 2>& v) {
-			this->x = static_cast<T>(v[0]);
-			this->y = static_cast<T>(v[1]);
+			this->x = static_cast<T>(v.x);
+			this->y = static_cast<T>(v.y);
+		}
+		template<typename U>
+		Vec(const Vec<U, 3>& v) {
+			this->x = static_cast<T>(v.x);
+			this->y = static_cast<T>(v.y);
+		}
+		template<typename U>
+		Vec(const Vec<U, 4>& v) {
+			this->x = static_cast<T>(v.x);
+			this->y = static_cast<T>(v.y);
 		}
 
 		// Operators
@@ -298,8 +308,21 @@ namespace numa {
 			this->y = static_cast<T>(v.x);
 			this->z = static_cast<T>(v.y);
 		}
+
+		template<typename U>
+		Vec(const Vec<U, 2>& v) {
+			this->x = static_cast<T>(v.x);
+			this->y = static_cast<T>(v.y);
+			this->z = static_cast<T>(0);
+		}
 		template<typename U>
 		Vec(const Vec<U, 3>& v) {
+			this->x = static_cast<T>(v.x);
+			this->y = static_cast<T>(v.y);
+			this->z = static_cast<T>(v.z);
+		}
+		template<typename U>
+		Vec(const Vec<U, 4>& v) {
 			this->x = static_cast<T>(v.x);
 			this->y = static_cast<T>(v.y);
 			this->z = static_cast<T>(v.z);
@@ -485,6 +508,20 @@ namespace numa {
 			this->w = static_cast<T>(v.z);
 		}
 
+		template<typename U>
+		Vec(const Vec<U, 2>& v) {
+			this->x = static_cast<T>(v.x);
+			this->y = static_cast<T>(v.y);
+			this->z = static_cast<T>(0);
+			this->w = static_cast<T>(0);
+		}
+		template<typename U>
+		Vec(const Vec<U, 3>& v) {
+			this->x = static_cast<T>(v.x);
+			this->y = static_cast<T>(v.y);
+			this->z = static_cast<T>(v.z);
+			this->w = static_cast<T>(0);
+		}
 		template<typename U>
 		Vec(const Vec<U, 4>& v) {
 			this->x = static_cast<T>(v.x);

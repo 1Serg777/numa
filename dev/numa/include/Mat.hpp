@@ -191,6 +191,16 @@ namespace numa {
 			this->x = m.x;
 			this->y = m.y;
 		}
+		template<typename U>
+		Mat(const Mat<U, 3, 3>& m) {
+			this->x = m.x;
+			this->y = m.y;
+		}
+		template<typename U>
+		Mat(const Mat<U, 4, 4>& m) {
+			this->x = m.x;
+			this->y = m.y;
+		}
 
 		// Operators
 
@@ -343,7 +353,19 @@ namespace numa {
 		// Converting constructors
 
 		template<typename U>
+		Mat(const Mat<U, 2, 2>& m) {
+			this->x = m.x;
+			this->y = m.y;
+			this->z = column_type{m.z, 1};
+		}
+		template<typename U>
 		Mat(const Mat<U, 3, 3>& m) {
+			this->x = m.x;
+			this->y = m.y;
+			this->z = m.z;
+		}
+		template<typename U>
+		Mat(const Mat<U, 4, 4>& m) {
 			this->x = m.x;
 			this->y = m.y;
 			this->z = m.z;
@@ -521,14 +543,28 @@ namespace numa {
 
 		template<typename U, typename V>
 		Mat(const Mat<U, 3, 3>& m, const Vec<V, 3>& v) {
-			this->x = column_type{m[0], 0};
-			this->y = column_type{m[1], 0};
-			this->z = column_type{m[2], 0};
-			this->w = column_type{v, 1};
+			this->x = column_type{m[0], 0.0f};
+			this->y = column_type{m[1], 0.0f};
+			this->z = column_type{m[2], 0.0f};
+			this->w = column_type{v, 1.0f};
 		}
 
 		// Converting constructors
 
+		template<typename U>
+		Mat(const Mat<U, 2, 2>& m) {
+			this->x = m.x;
+			this->y = m.y;
+			this->z = column_type{0, 0, 1, 0};
+			this->w = column_type{0, 0, 0, 1};
+		}
+		template<typename U>
+		Mat(const Mat<U, 3, 3>& m) {
+			this->x = m.x;
+			this->y = m.y;
+			this->z = m.z;
+			this->w = column_type{0, 0, 0, 1};
+		}
 		template<typename U>
 		Mat(const Mat<U, 4, 4>& m) {
 			this->x = m.x;
@@ -699,7 +735,7 @@ namespace numa {
 	Vec<T, Rows> operator*(const Mat<T, Rows, Cols>& m, const Vec<T, Cols>& v) {
 		Vec<T, Rows> res{};
 		for (int i = 0; i < Cols; i++) {
-			res[i] += m[i] * v[i];
+			res += m[i] * v[i];
 		}
 		return res;
 	}
