@@ -332,9 +332,9 @@ namespace numa {
 
 		Vec<T, 3> operator-() const {
 			Vec<T, 3> res{};
-			res.x = -this.x;
-			res.y = -this.y;
-			res.z = -this.z;
+			res.x = -this->x;
+			res.y = -this->y;
+			res.z = -this->z;
 			return res;
 		}
 
@@ -754,10 +754,28 @@ namespace numa {
 	// Functions involving vectors
 
 	template<typename T, int S>
+	Vec<T, S> Sqrt(const Vec<T, S>& v) {
+		Vec<T, S> res{};
+		for (int i = 0; i < S; i++) {
+			res[i] = static_cast<T>(std::sqrt(v[i]));
+		}
+		return res;
+	}
+
+	template<typename T, int S>
+	Vec<T, S> Exp(const Vec<T, S>& v) {
+		Vec<T, S> res{};
+		for (int i = 0; i < S; i++) {
+			res[i] = static_cast<T>(std::exp(v[i]));
+		}
+		return res;
+	}
+
+	template<typename T, int S>
 	Vec<T, S> Min(const Vec<T, S>& v1, const Vec<T, S>& v2) {
 		Vec<T, S> res{};
 		for (int i = 0; i < S; i++) {
-			res[i] = std::min(v1[i], v2[i]);
+			res[i] = static_cast<T>(std::min(v1[i], v2[i]));
 		}
 		return res;
 	}
@@ -765,7 +783,7 @@ namespace numa {
 	Vec<T, S> Min(const Vec<T, S>& v, const T& t) {
 		Vec<T, S> res{};
 		for (int i = 0; i < S; i++) {
-			res[i] = std::min(v[i], t);
+			res[i] = static_cast<T>(std::min(v[i], t));
 		}
 		return res;
 	}
@@ -774,7 +792,7 @@ namespace numa {
 	Vec<T, S> Max(const Vec<T, S>& v1, const Vec<T, S>& v2) {
 		Vec<T, S> res{};
 		for (int i = 0; i < S; i++) {
-			res[i] = std::max(v1[i], v2[i]);
+			res[i] = static_cast<T>(std::max(v1[i], v2[i]));
 		}
 		return res;
 	}
@@ -782,7 +800,7 @@ namespace numa {
 	Vec<T, S> Max(const Vec<T, S>& v, const T& t) {
 		Vec<T, S> res{};
 		for (int i = 0; i < S; i++) {
-			res[i] = std::max(v[i], t);
+			res[i] = static_cast<T>(std::max(v[i], t));
 		}
 		return res;
 	}

@@ -7,7 +7,7 @@ namespace numa {
 
 	namespace constants {
 
-		static constexpr double Pi       {3.1415926535897932384626433832795};
+		static constexpr double Pi       {3.14159265358979323846264338327950288};
 		static constexpr double PiOverTwo{Pi / 2.0};
 		static constexpr double TwoPi    {2.0 * Pi};
 
@@ -22,13 +22,13 @@ namespace numa {
 
 	namespace internal {
 
-		double PiConst() {
+		constexpr double PiConst() {
 			return constants::Pi;
 		}
-		double PiOverTwoConst() {
+		constexpr double PiOverTwoConst() {
 			return constants::PiOverTwo;
 		}
-		double TwoPiConst() {
+		constexpr double TwoPiConst() {
 			return constants::TwoPi;
 		}
 	
