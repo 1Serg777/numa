@@ -146,4 +146,136 @@ namespace numa {
 		return false;
 	}
 
+	bool Intersect(const Sphere& sphere, const Ray& ray, RayHitData& rayHitData) {
+		// TODO
+		return false;
+	}
+	bool Intersect(const Plane& plane, const Ray& ray, RayHitData& rayHitData) {
+		// TODO: use the already existing 'IntersectPlane' function.
+
+		rayHitData.hitRay = ray;
+
+		// Rd - ray direction, Ro - ray origin
+		// n - plane normal, p - intersection point
+
+		float Rd_dot_n = numa::Dot(ray.GetDirection(), plane.normal);
+
+		// bool rayPlaneParallel = rayDir_dot_planeNormal == 0;
+		bool rayPlaneParallel =
+			Rd_dot_n > -FLT_EPSILON &&
+			Rd_dot_n < FLT_EPSILON;
+
+		if (rayPlaneParallel)
+		{
+			// Ray and plane are parallel, no intersection
+
+			return false;
+		}
+
+		float Ro_dot_n = numa::Dot(ray.GetOrigin(), plane.normal);
+		float t = (plane.distance - Ro_dot_n) / (Rd_dot_n);
+
+		rayHitData.hitNormal = plane.normal;
+		rayHitData.hitPoint = ray.GetPoint(t);
+		rayHitData.t = t;
+
+		return true;
+	}
+	bool Intersect(const Triangle& triangle, const Ray& ray, RayHitData& rayHitData) {
+		// TODO: use the already existing 'IntersectTriangle' function.
+
+		rayHitData.hitRay = ray;
+		RayHitData rayPlaneHitData{};
+		if (!Intersect(triangle.GetTrianglePlane(), ray, rayPlaneHitData))
+		{
+			// 1. Ray and triangle are parallel, no intersection
+
+			return false;
+		}
+
+		if (rayPlaneHitData.t < 0.0f)
+		{
+			// 2. Triangle is behind ray, no intersection
+
+			return false;
+		}
+
+		numa::Vec3 p = rayPlaneHitData.hitPoint;
+
+		// Check what side the intersection point is on, relative to the three triangle edges.
+
+		// 
+		//                 C
+		//                /|
+		//               / |
+		//              /  |
+		//             /   |
+		//            /    |
+		//           /     |
+		//          /      |
+		//         /       |
+		//        /        |
+		//       /         |
+		//      /          |
+		//     /           |
+		//    A------------B
+		// 
+
+		// 1. AB
+
+		numa::Vec3 AB = triangle.B - triangle.A;
+		numa::Vec3 AP = p - triangle.A;
+
+		numa::Vec3 test1_vec = numa::Cross(AB, AP);
+		float test1 = numa::Dot(triangle.N, test1_vec);
+
+		if (test1 < 0.0f)
+		{
+			// The intersection point lies on the right side of the edge #1,
+			// meaning it can't be inside the triangle, so no intersection.
+
+			return false;
+		}
+
+		// 2. BC
+
+		numa::Vec3 BC = triangle.C - triangle.B;
+		numa::Vec3 BP = p - triangle.B;
+
+		numa::Vec3 test2_vec = numa::Cross(BC, BP);
+		float test2 = numa::Dot(triangle.N, test2_vec);
+
+		if (test2 < 0.0f)
+		{
+			// The intersection point lies on the right side of the edge #2,
+			// meaning it can't be inside the triangle, so no intersection.
+
+			return false;
+		}
+
+		// 3. CA
+
+		numa::Vec3 CA = triangle.A - triangle.C;
+		numa::Vec3 CP = p - triangle.C;
+
+		numa::Vec3 test3_vec = numa::Cross(CA, CP);
+		float test3 = numa::Dot(triangle.N, test3_vec);
+
+		if (test3 < 0.0f)
+		{
+			// The intersection point lies on the right side of the edge #3,
+			// meaning it can't be inside the triangle, so no intersection.
+
+			return false;
+		}
+
+		// If we're here, then the ray-plane intersection point is inside the triangle.
+
+		rayHitData.hitNormal = rayPlaneHitData.hitNormal;
+		rayHitData.hitPoint = rayPlaneHitData.hitPoint;
+		rayHitData.t = rayPlaneHitData.t;
+
+		return true;
+	}
+
 }

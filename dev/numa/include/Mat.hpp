@@ -775,6 +775,29 @@ namespace numa {
 	}
 
 	// Functions involving matrices
-	// TODO
+	
+	template<typename T, int N>
+	Mat<T, N, N> Inverse(const Mat<T, N, N>& A) {
+		// TODO:
+		return A;
+	}
+
+	template<typename T>
+	Mat<T, 2, 2> Inverse(const Mat<T, 2, 2>& A) {
+		// TODO:
+		return A;
+	}
+
+	template<typename T>
+	Mat<T, 3, 3> Inverse(const Mat<T, 3, 3>& A) {
+		// TODO:
+		return A;
+	}
+
+	template<typename T>
+	Mat<T, 4, 4> Inverse(const Mat<T, 4, 4>& A) {
+		// TODO:
+		return A;
+	}
 
 }

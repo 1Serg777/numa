@@ -6,9 +6,7 @@
 
 #include <limits>
 
-namespace numa
-{
-	
+namespace numa {
 
 	// 1) When there's only one hit:
 	//    - If the ray is 'in front', T1 contains the result (positive) (or 0?)
@@ -66,7 +64,19 @@ namespace numa
 		// TODO
 	};
 
+	struct RayHitData {
+		Ray hitRay{};
+		numa::Vec3 hitNormal{};
+		numa::Vec3 hitPoint{};
+		float t{};
+	};
+
 	bool IntersectSphere(const Sphere& sphere, const Ray& ray, RaySphereHit& rayHit);
 	bool IntersectPlane(const Plane& plane, const Ray& ray, RayPlaneHit& rayHit);
 	bool IntersectTriangle(const Triangle& triangle, const Ray& ray, RayTriangleHit& rayHit);
+
+	bool Intersect(const Sphere& sphere, const Ray& ray, RayHitData& rayHitData);
+	bool Intersect(const Plane& plane, const Ray& ray, RayHitData& rayHitData);
+	bool Intersect(const Triangle& triangle, const Ray& ray, RayHitData& rayHitData);
+
 }
