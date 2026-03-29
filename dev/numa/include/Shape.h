@@ -20,6 +20,10 @@ namespace numa {
 		float distance{};
 	};
 
+	struct Quad {
+		// TODO
+	};
+
 	struct Triangle {
 		// 1. 2 Vec2 vectors?
 		//    For an ABC triangle, the vectors are

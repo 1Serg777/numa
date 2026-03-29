@@ -5,11 +5,12 @@
 namespace numa {
 
 	double RandomDouble() {
+		// C-style alternative
 		// Returns a random real in the [0,1) range.
-		// return rand() / (RAND_MAX + 1.0); // C-style alternative
+		// return rand() / (RAND_MAX + 1.0);
 
 		static std::uniform_real_distribution<double> distribution(0.0, 1.0);
-		static std::mt19937 generator{}; // static std::mt19937 generator;
+		static std::mt19937 generator{};
 		return distribution(generator);
 	}
 	double RandomDouble(double min, double max) {
