@@ -843,6 +843,14 @@ namespace numa {
 		// we should probably limit this operation only to Vec3 (what about Vec4?)
 		return cross;
 	}
+	template<typename T>
+	Vec<T, 3> Cross(const Vec<T, 3>& v1, const Vec<T, 3>& v2) {
+		return Vec<T, 3> {
+			v1.y * v2.z - v1.z * v2.y,
+			v1.z * v2.x - v1.x * v2.z,
+			v1.x * v2.y - v1.y * v2.x,
+		};
+	}
 
 	template<typename T, int S>
 	T Length2(const Vec<T, S>& v) {
